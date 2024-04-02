@@ -1,29 +1,47 @@
 import React from 'react';
-import { View, Image, StyleSheet, Text, SafeAreaView, Button, Platform, ScrollView } from 'react-native';
+import { View, Image, StyleSheet, Text, SafeAreaView, Button, Platform, ScrollView,TouchableOpacity } from 'react-native';
 import icons from '../assets/icons';
+import { useNavigation } from '@react-navigation/native';
+import { FontAwesome } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Icon } from '@rneui/themed';
+
 
 const jobListings = [
     {
         companyName: 'Facebook',
         jobTitle: 'Full time UI Designer',
-        location: '&8k-Tokyo, Japan',
-        imageSource: icons.share,
+        location: '$8k - Tokyo, Japan',
+        imageSource:icons.facebook,
+      
     },
     {
         companyName: 'Babbel',
         jobTitle: 'UX Designer',
-        location: '$6k-Berlin, Germany',
+        location: '$6k - Berlin, Germany',
         imageSource: icons.chevronLeft,
     },
     {
         companyName: 'Amazon',
         jobTitle: 'Sr Product Designer',
-        location: '$8k-Berlin, Germany',
-        imageSource: icons.locationlinked,
+        location: '$8k - Berlin, Germany',
+        imageSource: icons.linkedin,
     },
 ];
 
 const FrontPage = () => {
+
+const navigation = useNavigation(); // Initialize navigation
+
+const handleJobDetails = (job) => {
+    navigation.navigate('JobDetails', {
+      companyName: job.companyName,
+      jobTitle: job.jobTitle,
+      location: job.location,
+      imageSource: job.imageSource,
+    });
+  };
+
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -51,25 +69,27 @@ const FrontPage = () => {
                 </View>
 
                 {jobListings.map((job, index) => (
-                    <View style={styles.fulltimeUiDesigner} key={index}>
-                        <View style={styles.firstImage}>
-                            <Image
-                                source={job.imageSource}
-                                style={styles.facebook}
-                            />
+                    <TouchableOpacity key={index} onPress={() => handleJobDetails(job)}>
+                        <View style={styles.fulltimeUiDesigner}>
+                            <View style={styles.firstImage}>
+                                <Image
+                                    source={job.imageSource}
+                                    style={styles.facebook}
+                                />
+                            </View>
+                            <View style={styles.designtext}>
+                                <Text>{job.companyName}</Text>
+                                <Text>{job.jobTitle}</Text>
+                                <Text>{job.location}</Text>
+                            </View>
+                            <View>
+                                <Image
+                                    source={icons.heart}
+                                    style={styles.heartIcon}
+                                />
+                            </View>
                         </View>
-                        <View style={styles.designtext}>
-                            <Text>{job.companyName}</Text>
-                            <Text>{job.jobTitle}</Text>
-                            <Text>{job.location}</Text>
-                        </View>
-                        <View>
-                            <Image
-                                source={icons.heart}
-                                style={styles.heartIcon}
-                            />
-                        </View>
-                    </View>
+                    </TouchableOpacity>
                 ))}
             </ScrollView>
         </SafeAreaView>
@@ -79,7 +99,7 @@ const FrontPage = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: Platform.OS === "android" ? 20 : 0
+        // paddingTop: Platform.OS === "android" ? 20 : 0
     },
     left: {
         width: 20,
@@ -90,7 +110,7 @@ const styles = StyleSheet.create({
         padding: 3,
         borderRadius: 10,
         position: 'absolute',
-        top: 25,
+        top: 15,
         left: 20,
     },
     ui: {
@@ -135,7 +155,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: 10,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: '#FFFFFF',
         borderRadius: 20,
         marginVertical: 5,
         margin: 20,
